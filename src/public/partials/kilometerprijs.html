@@ -1,0 +1,21 @@
+<h2>Kilometerprijs</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Begindatum</th>
+        <th>Einddatum</th>
+        <th>Prijs incl btw</th>
+        <th>Btw%</th>
+        <th>Valuta</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="prijs in kilometerPrijzen">
+        <td>{{prijs.begindatum | date}}</td>
+        <td>{{prijs.einddatum | date}}</td>
+        <td>{{prijs.prijsinclusiefbtw | number}}</td>
+        <td>{{prijs.btwpercentage | number}}</td>
+        <td>{{prijs.valuta}}</td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,24 @@
+<h2>boeken</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Omschrijving</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="boek in boeken">
+        <td>{{boek.id}}</td>
+        <td>{{boek.omschrijving}}</td>
+        <td>{{boek.created_at}}</td>
+        <td>
+            <div class="btn-group">
+                <button class="btn">Wijzig</button>
+                <button class="btn">Verwijder</button>
+            </div>
+        </td>
+    </tr>
+</table>
+

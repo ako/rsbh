@@ -1,0 +1,17 @@
+<h2>Valutas</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Omschrijving</th>
+        <th>Waarde</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="valuta in valutas">
+        <td>{{valuta.id}}</td>
+        <td>{{valuta.omschrijving}}</td>
+        <td>{{valuta.value | number}}</td>
+    </tr>
+    </tbody>
+</table>

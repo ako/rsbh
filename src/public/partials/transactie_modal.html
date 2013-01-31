@@ -1,0 +1,119 @@
+<div class="modal-header">
+    <h2>Nieuwe transactie</h2>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="row">
+            <div class="span6">
+                <div class="control-group">
+                <button class="btn" ng-click="transactieOpslaan(tx)">Opslaan</button>
+                </div>
+                <div class="control-group">
+                    <label for="datum"
+                           class="control-label">Datum</label></label>
+                    <div class="controls">
+                        <input id="datum" type="date" class="input-large"
+                               name="datum" ng-model="tx.datum"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="omschrijving"
+                           class="control-label">Omschrijving</label></label>
+                    <div class="controls">
+                        <input id="omschrijving" type="text"
+                               class="input-large"
+                               name="omschrijving" ng-model="tx.omschrijving"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="soort"
+                           class="control-label">Soort</label></label>
+                    <div class="controls">
+                        <input id="soort" type="text"
+                               class="input-large"
+                               name="soort" ng-model="tx.soort"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="rekeningnummer"
+                           class="control-label">Rekeningnr.</label></label>
+                    <div class="controls">
+                        <input id="rekeningnummer" type="number"
+                               class="input-large"
+                               name="rekeningnummer" ng-model="tx.rekeningnummer"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bonnummer"
+                           class="control-label">Bonnr.</label></label>
+                    <div class="controls">
+                        <input id="bonnummer" type="number"
+                               class="input-large"
+                               name="bonnummer" ng-model="tx.bonnummer"/>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="control-group">
+                    <label for="afbij"
+                           class="control-label">Af/bij</label></label>
+                    <div class="controls">
+                        <input id="afbij" type="text"
+                               class="input-large"
+                               name="afbij" ng-model="tx.afbij"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="valuta"
+                           class="control-label">Valuta</label></label>
+                    <div class="controls">
+                        <input id="valuta" type="text"
+                               class="input-large"
+                               name="valuta" ng-model="tx.valuta"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="kilometers"
+                           class="control-label">Kilometers</label></label>
+                    <div class="controls">
+                        <input id="kilometers" type="number"
+                               class="input-large"
+                               name="kilometers" ng-model="tx.kilometers"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bedragexclbtw"
+                           class="control-label">Bedrag ex. btw.</label></label>
+                    <div class="controls">
+                        <input id="bedragexclbtw" type="number"
+                               class="input-large"
+                               name="bedragexclbtw" ng-model="tx.bedragexclbtw"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bedraginclbtw"
+                           class="control-label">Bedrag incl.
+                        btw.</label></label>
+                    <div class="controls">
+                        <input id="bedraginclbtw" type="number"
+                               class="input-large"
+                               name="bedraginclbtw" ng-model="tx.bedraginclbtw"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="btwpercentage"
+                           class="control-label">Btw%</label></label>
+                    <div class="controls">
+                        <input id="btwpercentage" type="number"
+                               class="input-large"
+                               name="btwpercentage" ng-model="tx.btwpercentage"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn" ng-click="transactieOpslaan(tx)">Opslaan</button>
+</div>

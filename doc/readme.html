@@ -1,0 +1,86 @@
+<h1 id="boekhouding">Boekhouding</h1>
+
+<h2 id="installatie-gebruikte-frameworks">Installatie gebruikte frameworks</h2>
+
+<p>Beheer van de ruby tooling gaat met <a href="https://rvm.io/">rvm</a>. Uitgebreide uitleg: <a href="http://sirupsen.com/get-started-right-with-rvm/">Get started right with RVM</a>
+Zelf installeren (dus niet via apt-get) is aanbevolen aanpak, zie: <a href="http://ryanbigg.com/2010/12/ubuntu-ruby-rvm-rails-and-you/">Ubuntu, Ruby, RVM, Rails, and You</a></p>
+
+<p>Stappen voor installatie:</p>
+
+<ol>
+  <li>
+    <p>Installeer rvm:</p>
+
+    <pre><code> $ curl -L https://get.rvm.io | bash -s stable --ruby
+</code></pre>
+  </li>
+  <li>
+    <p>Installeer Ruby via rvm:</p>
+
+    <pre><code> $ rvm install 1.9.3
+</code></pre>
+  </li>
+  <li>
+    <p>Definieer een gemset</p>
+
+    <pre><code> $ rvm use 1.9.3@boekhouding --create
+</code></pre>
+  </li>
+  <li>
+    <p>Installeer dependencies van het project:</p>
+
+    <pre><code> $ gem install sinatra
+ $ gem install data_mapper
+ $ gem install dm-postgres-adapter
+ $ gem install kramdown
+</code></pre>
+  </li>
+</ol>
+
+<h2 id="html-documentatie-genereren">HTML documentatie genereren</h2>
+
+<pre><code>$ kramdown readme.md
+</code></pre>
+
+<h2 id="configuratie">Configuratie</h2>
+
+<ol>
+  <li>
+    <p>Database configureren - Staat nu nog hard gecodeerd in BoekhoudingApp.rb. Pas
+de volgende regel aan:</p>
+
+    <pre><code>DataMapper.setup(:default, 'postgres://bh2:bh2@localhost/bh2dev')
+</code></pre>
+  </li>
+</ol>
+
+<h2 id="applicatie-starten">Applicatie starten</h2>
+
+<p>Start de applicatie als volgt:</p>
+
+<pre><code>$ ruby BoekhoudingApp.rb
+</code></pre>
+
+<p>Je kunt de applicatie nu in een browser openen met de url: <a href="http://localhost:4567/index.html">http://localhost:4567/index.html</a></p>
+
+<h2 id="technische-info">Technische info</h2>
+
+<p>Technische opzet is als volgt:</p>
+
+<ul>
+  <li>Rest service voor de boekhouding objecten:
+    <ul>
+      <li>Ruby - dynamische programmeer taal</li>
+      <li>Sinatra - thin web framework, implementatie rest services</li>
+      <li>data_mapper - OMR framework, communicatie ruby met postgres</li>
+    </ul>
+  </li>
+  <li>Single page javascript web applicatie:
+    <ul>
+      <li>Angularjs - javascript mvc raamwerk</li>
+      <li>Bootstrap - layout en ui componenten</li>
+      <li>jquery - javascript dom abstractie</li>
+    </ul>
+
+  </li>
+</ul>

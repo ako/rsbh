@@ -1,0 +1,77 @@
+<h2>Transacties</h2>
+<form class="form-inline">
+    <div class="btn-group">
+        <button class="btn" ng-click="refresh()">Refresh</button>
+        <button class="btn" ng-click="toevoegPopup()">Toevoegen</button>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <!--
+            <th>Id</th>
+            <th>Boek</th>
+            -->
+            <th>Datum</th>
+            <th>Omschrijving</th>
+            <th>Bonnummer</th>
+            <th>Rekeningnumer</th>
+            <th>Af/Bij</th>
+            <th>Valuta</th>
+            <th>Bedrag excl. btw</th>
+            <th>Bedrag incl. btw.</th>
+            <th>Btw%</th>
+            <th>Soort</th>
+            <th>Km</th>
+        </tr>
+        <tr>
+            <td><input class="input-mini" name="f_datum" ng-model="f_datum"/></td>
+            <td><input type="text" class="input-mini" name="f_omschrijving" ng-model="f_omschrijving"/></td>
+            <td><input type="text" class="input-mini" name="f_bonnumer" ng-model="f_bonnummer"/></td>
+            <td><input type="text" class="input-mini" name="f_rekeningnummer" ng-model="f_rekeningnummer"/></td>
+            <td><input type="text" class="input-mini" name="f_afbij" ng-model="f_afbij"/></td>
+            <td><input type="text" class="input-mini" name="f_valuta" ng-model="f_valuta"/></td>
+            <td><input type="text" class="input-mini" name="f_bedragexclbtw" ng-model="f_bedragexclbtw"/></td>
+            <td><input type="text" class="input-mini" name="f_bedraginclbtw" ng-model="f_bedraginclbtw"/></td>
+            <td><input type="text" class="input-mini" name="f_btwpercentage" ng-model="f_btwpercentage"/></td>
+            <td><input type="text" class="input-mini" name="f_transactiesoort" ng-model="f_transactiesoort"/></td>
+            <td><input type="text" class="input-mini" name="f_kilometers" ng-model="f_kilometers"/></td>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="13">
+                Records: {{transactiesCount}}
+                <label for="offset">Offset</label><input value="0" name="offset"
+                                                         id="offset"
+                                                         ng-model="offset"
+                                                         class="input-mini"/>
+                <label for="limit">Limit</label><input value="10" name="limit"
+                                                       id="limit"
+                                                       ng-model="limit"
+                                                       class="input-mini"/>
+                <input type="submit" value="Refresh" ng-click="refresh()"/>
+            </td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <tr data-ng-repeat="transactie in transacties">
+            <!--
+            <td>{{transactie.id}}</td>
+            <td>{{transactie.boek}}</td>
+            -->
+            <td style="white-space: nowrap;">{{transactie.datum | date}}</td>
+            <td>{{transactie.omschrijving}}</td>
+            <td>{{transactie.bonnummer| number}}</td>
+            <td>{{transactie.rekeningnummer| number}}</td>
+            <td>{{transactie.afbij}}</td>
+            <td>{{transactie.valuta}}</td>
+            <td>{{transactie.bedragexclusiefbtw | number }}</td>
+            <td>{{transactie.bedraginclusiefbtw | number }}</td>
+            <td>{{transactie.btwpercentage | number }}</td>
+            <td>{{transactie.transactiesoort}}</td>
+            <td>{{transactie.kilometers | number}}</td>
+        </tr>
+        </tbody>
+
+    </table>
+</form>

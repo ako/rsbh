@@ -1,0 +1,16 @@
+<h2>Transactiesoorten</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Omschrijving</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="soort in transactieSoorten">
+        <td>{{soort.id}}</td>
+        <td>{{soort.omschrijving}}</td>
+    </tr>
+    </tbody>
+</table>
