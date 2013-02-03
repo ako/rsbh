@@ -61,6 +61,12 @@ class Transactie
     property :btwpercentage,        Float
     property :transactiesoort,      String
     property :kilometers,           Integer
+
+    def self.nextId
+        nid = repository(:default).adapter.select("select nextval('transactie_id_seq')")
+        puts "next id #{nid[0]}"
+        return nid[0]
+    end
 end
 
 class Inkomsten
@@ -137,6 +143,41 @@ get '/boeken/:id' do | boekId |
 	content_type 'text/json'
 	boek = Boek.get(boekId)
 	boek.to_json
+end
+
+post '/boeken/:boekId/transacties' do | boekId |
+    logger.info "post transacties"
+    tx = Transactie.new
+    tx.id = Transactie.nextId
+    tx.boek = boekId
+    data = JSON.parse(request.body.read)
+    logger.info data
+    logger.info data['datum']
+    tx.datum = data['datum']
+    tx.omschrijving = data['omschrijving']
+    tx.bonnummer = data['bonnummer']
+    tx.rekeningnummer = data['rekeningnummer']
+    tx.afbij = data['afbij']
+    tx.valuta = data['valuta']
+    tx.bedragexclusiefbtw =data['bedragexclbtw']
+    tx.bedraginclusiefbtw = data['bedraginclbtw']
+    tx.btwpercentage = data['btwpercentage']
+    tx.transactiesoort = data['soort']
+    tx.kilometers  = data['kilometers']
+
+    logger.info tx
+    if tx.save
+        #valid, saved
+        logger.info "save, id #{tx.id}"
+        status 201 #Created
+        newTxUrl = "/boeken/#{boekId}/transacties/#{tx.id}"
+        headers 'Location' => newTxUrl
+    else
+        #not valid
+        tx.errors.each do | e |
+            logger.info e
+        end
+    end
 end
 
 get '/boeken/:boekId/transacties/:transactieId' do | boekId, transactieId |

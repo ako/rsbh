@@ -13,3 +13,12 @@ th { white-space: nowrap; }
 .ako-icons {
     font-family: 'Ako';
 }
+
+#busy { display: none; position: fixed; left: 0; top: 0;
+    width: 100%; height: 100%; background-color: rgba(192,192,192,.5);
+    z-index: 1040; text-align: center;
+}
+
+#busy i { margin-top: 20%; }
+
+.transactieForm { display: none; background-color: #ddd; margin-top: 1em; margin-bottom: 1em; padding: 10px; }

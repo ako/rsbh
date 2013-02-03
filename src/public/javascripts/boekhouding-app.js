@@ -75,7 +75,8 @@ BoekhoudingSvc.
 	factory('Transactie', function ($resource) {
 		console.log('transactieSvc');
 		return $resource('/boeken/:boekId/transacties/:transactieId', {}, {
-			query:{method:'GET', params:{transactieId:'all'}, isArray:true}
+			query:{method:'GET', params:{transactieId:'all'}, isArray:true},
+			save:{method:'POST'}
 		});
 	}).factory('Globals',function($resource){
 		console.log('Globals');
@@ -185,14 +186,20 @@ TransactiesCtrl.$inject = ['$scope', 'TransactieSoort']
 
 /******************************** TransactiesCtrl *****************************/
 
-function TransactiesCtrl($scope, Transactie, $dialog,Globals) {
+function TransactiesCtrl($scope, Transactie, $dialog,Globals, TransactieSoort, Valuta) {
 	console.log('TransactiesCtrl');
 	$scope.offset = 0;
 	$scope.limit = 1000;
 	$scope.filter = "";
 	$scope.sortCol = "datum";
 	$scope.sortReverse = false;
+	$scope.actiefBoek = Globals.actiefBoek;
+	$scope.actiefJaar = Globals.actiefJaar;
+	$scope.tx = new Transactie();
+	$scope.transactieSoorten =  TransactieSoort.query();
+	$scope.valutas = Valuta.query();
 	$scope.refresh = function(){
+		$("#busy").show();
 		$scope.transacties = Transactie.query(
 			{ 	offset:$scope.offset,
 			  	limit:$scope.limit,
@@ -202,20 +209,14 @@ function TransactiesCtrl($scope, Transactie, $dialog,Globals) {
 			function(){
 				console.log($scope.transacties[0]);
 				$scope.transactiesCount = $scope.transacties.length;
+				$scope.actiefBoek = Globals.actiefBoek;
+				$scope.actiefJaar = Globals.actiefJaar;
+				$("#busy").hide();
 			}
 		);
 	};
 	$scope.toevoegPopup = function(){
-		var d = $dialog.dialog({
-				templateUrl: '/partials/transactie_modal.html',
-				controller: 'EditTransactieCtrl'
-			});
-		    d.open().then(function(result){
-		      if(result)
-		      {
-		        alert('dialog closed with result: ' + result);
-		      }
-		    });
+		$(".transactieForm").show();
 	};
 	$scope.sort = function(col){
 		console.log("sort: " + col + ", " + $(col).attr("class"));
@@ -223,26 +224,18 @@ function TransactiesCtrl($scope, Transactie, $dialog,Globals) {
 		$scope.sortReverse = !$scope.sortReverse;
 	}
 	$scope.sortIcon = function(col){
-		console.log("sortIcon: " + col);
 		if(col == $scope.sortCol){
-			if ( $scope.sortReverse ){
-				return "icon-sort-down";
-			} else {
-				return "icon-sort-up";
-			}
+				return $scope.sortReverse ? "icon-sort-up" : "icon-sort-down";
 		} else {
 			return "icon-sort";
 		}
 	}
-};
-TransactiesCtrl.$inject = ['$scope', 'Transactie','$dialog','Globals']
-
-function EditTransactieCtrl($scope, dialog) {
-	$scope.tx = {};
 	$scope.transactieOpslaan = function(tx){
-		console.log("transactieOpslaan: " + tx);
-		dialog.close(tx);
+		console.log("transactieOpslaan");
+		console.log($scope.tx);
+		$scope.tx.$save({boekId:Globals.actiefBoek});
 	}
 };
+TransactiesCtrl.$inject = ['$scope', 'Transactie','$dialog','Globals','TransactieSoort','Valuta']
 
 console.log("init done");

@@ -1,11 +1,146 @@
 <h2>Transacties</h2>
+
+<div class="transactieForm row">
+    <form class="form-horizontal">
+        <div class="span6">
+            <fieldset>
+                <div class="control-group">
+                    <label for="datum"
+                           class="control-label">Datum</label></label>
+                    <div class="controls">
+                        <input id="datum" type="date" class="input-large"
+                               name="datum" ng-model="tx.datum" required="true"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="omschrijving"
+                           class="control-label">Omschrijving</label></label>
+                    <div class="controls">
+                        <input id="omschrijving" type="text"
+                               class="input-large"
+                               name="omschrijving"
+                               ng-model="tx.omschrijving" required="true"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="soort"
+                           class="control-label">Soort</label></label>
+                    <div class="controls">
+                        <select id="soort"
+                               ng-model="tx.soort"
+                               ng-options="obj.id as obj.omschrijving for obj in transactieSoorten"
+                               class="input-large"
+                               name="soort" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="rekeningnummer"
+                           class="control-label">Rekeningnr.</label></label>
+                    <div class="controls">
+                        <input id="rekeningnummer" type="number"
+                               class="input-large"
+                               name="rekeningnummer"
+                               ng-model="tx.rekeningnummer"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bonnummer"
+                           class="control-label">Bonnr.</label></label>
+                    <div class="controls">
+                        <input id="bonnummer" type="number"
+                               class="input-large"
+                               name="bonnummer" ng-model="tx.bonnummer"/>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="span6">
+            <fieldset>
+                <div class="control-group">
+                    <label for="afbij"
+                           class="control-label">Af/bij</label></label>
+                    <div class="controls">
+                        <select id="afbij" type="text"
+                               class="input-large"
+                               name="afbij" ng-model="tx.afbij"
+                               data-provide="typeahead" data-source="['af','bij']"
+                                >
+                            <option value="AF">Af</option>
+                            <option value="BIJ">Bij</option>
+                            </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="valuta"
+                           class="control-label">Valuta</label></label>
+                    <div class="controls">
+                        <select id="valuta" type="text"
+                               class="input-large"
+                               name="valuta" ng-model="tx.valuta"
+                                ng-options="obj.id as obj.omschrijving for obj in valutas"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="kilometers"
+                           class="control-label">Kilometers</label></label>
+                    <div class="controls">
+                        <input id="kilometers" type="number"
+                               class="input-large"
+                               name="kilometers" ng-model="tx.kilometers"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bedragexclbtw"
+                           class="control-label">Bedrag ex.
+                        btw.</label></label>
+                    <div class="controls">
+                        <input id="bedragexclbtw" type="number"
+                               class="input-large" step="any"
+                               name="bedragexclbtw"
+                               ng-model="tx.bedragexclbtw"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bedraginclbtw"
+                           class="control-label">Bedrag incl.
+                        btw.</label></label>
+                    <div class="controls">
+                        <input id="bedraginclbtw" type="number"
+                               class="input-large" step="any"
+                               name="bedraginclbtw"
+                               ng-model="tx.bedraginclbtw"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="btwpercentage"
+                           class="control-label">Btw%</label></label>
+                    <div class="controls">
+                        <input id="btwpercentage" type="number"
+                               class="input-large" step="any"
+                               name="btwpercentage"
+                               ng-model="tx.btwpercentage"/>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="pull-right btn-group">
+            <button class="btn" ng-click="transactieOpslaan(this)">Opslaan
+            </button>
+        </div>
+    </form>
+</div>
+
 <form class="form-inline">
     <div class="btn-group">
         <button class="btn" ng-click="refresh()">Refresh</button>
         <button class="btn" ng-click="toevoegPopup()">Toevoegen</button>
     </div>
     <label for="filter">Filter</label>
-    <input type="text" class="input-mini" id="filter" name="filter" ng-model="filter"/>
+    <input type="text" class="input-mini" id="filter" name="filter"
+           ng-model="filter"/>
+    <label class="pull-right">Aantal transacties voor boek {{actiefBoek}} in
+        {{actiefJaar}}: {{transactiesCount}}</label>
+
     <table class="table">
         <thead>
         <tr>
@@ -13,19 +148,31 @@
             <th>Id</th>
             <th>Boek</th>
             -->
-            <th>Datum <i class="{{sortIcon('datum')}}" ng-click="sort('datum')"></i></th>
-            <th>Omschr <i class="{{sortIcon('omschrijving')}}"  ng-click="sort('omschrijving')"></i></th>
-            <th>Bonnr <i class="{{sortIcon('bonnummer')}}"  ng-click="sort('bonnummer')"></i></th>
-            <th>Reknr <i class="{{sortIcon('rekeningnummer')}}"  ng-click="sort('rekeningnummer')"></i></th>
-            <th>Af/Bij <i class="{{sortIcon('afbij')}}"  ng-click="sort('afbij')"></i></th>
-            <th>Valuta <i class="{{sortIcon('valuta')}}"  ng-click="sort('valuta')"></i></th>
-            <th>Bedr excl <i class="{{sortIcon('bedragexclusiefbtw')}}"  ng-click="sort('bedragexclusiefbtw')"></i></th>
-            <th>Bedr incl <i class="{{sortIcon('bedraginclusiefbtw')}}"  ng-click="sort('bedraginclusiefbtw')"></i></th>
-            <th>Btw% <i class="{{sortIcon('btwpercentage')}}"  ng-click="sort('btwpercentage')"></i></th>
-            <th>Soort <i class="{{sortIcon('transactiesoort')}}"  ng-click="sort('transactiesoort')"></i></th>
-            <th>Km <i class="{{sortIcon('kilometers')}}"  ng-click="sort('kilometers')"></i></th>
+            <th>Datum <i class="{{sortIcon('datum')}}"
+                         ng-click="sort('datum')"></i></th>
+            <th>Omschr <i class="{{sortIcon('omschrijving')}}"
+                          ng-click="sort('omschrijving')"></i></th>
+            <th>Bonnr <i class="{{sortIcon('bonnummer')}}"
+                         ng-click="sort('bonnummer')"></i></th>
+            <th>Reknr <i class="{{sortIcon('rekeningnummer')}}"
+                         ng-click="sort('rekeningnummer')"></i></th>
+            <th>Af/Bij <i class="{{sortIcon('afbij')}}"
+                          ng-click="sort('afbij')"></i></th>
+            <th>Valuta <i class="{{sortIcon('valuta')}}"
+                          ng-click="sort('valuta')"></i></th>
+            <th>Bedr excl <i class="{{sortIcon('bedragexclusiefbtw')}}"
+                             ng-click="sort('bedragexclusiefbtw')"></i></th>
+            <th>Bedr incl <i class="{{sortIcon('bedraginclusiefbtw')}}"
+                             ng-click="sort('bedraginclusiefbtw')"></i></th>
+            <th>Btw% <i class="{{sortIcon('btwpercentage')}}"
+                        ng-click="sort('btwpercentage')"></i></th>
+            <th>Soort <i class="{{sortIcon('transactiesoort')}}"
+                         ng-click="sort('transactiesoort')"></i></th>
+            <th>Km <i class="{{sortIcon('kilometers')}}"
+                      ng-click="sort('kilometers')"></i></th>
         </tr>
         </thead>
+        <!--
         <tfoot>
         <tr>
             <td colspan="13">
@@ -42,13 +189,16 @@
             </td>
         </tr>
         </tfoot>
+        -->
         <tbody>
         <tr data-ng-repeat="transactie in transacties | filter:filter | orderBy:sortCol:sortReverse ">
             <!--
             <td>{{transactie.id}}</td>
             <td>{{transactie.boek}}</td>
             -->
-            <td style="white-space: nowrap;">{{transactie.datum | date:'MM/dd/yyyy'}}</td>
+            <td style="white-space: nowrap;">{{transactie.datum |
+                date:'MM/dd/yyyy'}}
+            </td>
             <td>{{transactie.omschrijving}}</td>
             <td>{{transactie.bonnummer| number}}</td>
             <td>{{transactie.rekeningnummer| number}}</td>
