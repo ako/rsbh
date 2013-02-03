@@ -14,6 +14,12 @@ class Boek
 	property :omschrijving,	        String, :required => true
 end
 
+class Jaar
+    include DataMapper::Resource
+	storage_names[:default] = 'jaren'
+	property :jaar, 			    Integer, :key => true
+end
+
 class TransactieSoort
     include DataMapper::Resource
     storage_names[:default] = 'transactie_soorten'
@@ -50,9 +56,9 @@ class Transactie
     property :rekeningnummer,       Integer
     property :afbij,                String
     property :valuta,               String
-    property :bedragexclusiefbtw,   Decimal
-    property :bedraginclusiefbtw,   Decimal
-    property :btwpercentage,        Decimal
+    property :bedragexclusiefbtw,   Float
+    property :bedraginclusiefbtw,   Float
+    property :btwpercentage,        Float
     property :transactiesoort,      String
     property :kilometers,           Integer
 end
@@ -121,6 +127,12 @@ get '/boeken' do
 	boeken.to_json
 end
 
+get '/jaren' do
+	content_type 'text/json'
+	jaren = Jaar.all :order => :jaar.asc
+	jaren.to_json
+end
+
 get '/boeken/:id' do | boekId |
 	content_type 'text/json'
 	boek = Boek.get(boekId)
@@ -139,10 +151,14 @@ end
 get '/boeken/:boekId/transacties/:transactieId' do | boekId, transactieId |
 	content_type 'text/json'
     logger.info "alle transacties"
-    limit = 100 unless params[:limit].is_a? Integer
+    limit = 1000 unless params[:limit].is_a? Integer
     offset = 0 unless params[:offset].is_a? Integer
+    beginDate = Date.new( params[:jaar].to_i,1,1 )
+    endDate = Date.new( params[:jaar].to_i,12,31 )
+
     transactie = {
        :boek.like => boekId,
+       :datum => beginDate..endDate,
 #       :datum.to_s.like => "%#{params[:datum]}%",
        :omschrijving.like => "%#{params[:omschrijving]}%",
 #        :bonnummer.like => "%#{params[:bonnummer]}%",

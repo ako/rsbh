@@ -1,3 +1,15 @@
 #rapport_parameters label, #rapport_parameters input { display: inline; }
 tfoot label, tfoot input { display:inline; }
 body { margin-top: 40px; }
+th { white-space: nowrap; }
+
+@font-face {
+    font-family: 'Ako';
+    src: url("../font/Ako.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ako-icons {
+    font-family: 'Ako';
+}

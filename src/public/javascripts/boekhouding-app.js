@@ -48,6 +48,12 @@ BoekhoudingSvc.
 			query:{method:'GET', params:{boekId:''}, isArray:true}
 		});
 	}).
+	factory('Jaar',function ($resource) {
+		console.log('jaarSvc');
+		return $resource('/jaren/:jaar', {}, {
+			query:{method:'GET', params:{jaar:''}, isArray:true}
+		});
+	}).
 	factory('Valuta',function ($resource) {
 		console.log('valutaSvc');
 		return $resource('/valutas/:valutaId', {}, {
@@ -74,7 +80,8 @@ BoekhoudingSvc.
 	}).factory('Globals',function($resource){
 		console.log('Globals');
 		return {
-			actiefBoek: "x"
+			actiefBoek: "x",
+			actiefJaar: 2013
 		};
 	});
 
@@ -86,9 +93,6 @@ BoekhoudingSvc.
 
 function WelkomCtrl($scope) {
 	console.log('WelkomCtrl');
-	$scope.kiesBoek = function(){
-		console.log("kiesBoek2");
-	}
 };
 
 function BoekKeuzeCtrl($scope,Globals,Boek){
@@ -104,6 +108,20 @@ function BoekKeuzeCtrl($scope,Globals,Boek){
 	}
 }
 BoekKeuzeCtrl.$inject = ['$scope','Globals','Boek']
+
+function JaarKeuzeCtrl($scope,Globals,Jaar){
+	$scope.jaren = Jaar.query(function(){
+		console.log("jaren: "+ $scope.jaren.length);
+		Globals.actiefJaark = $scope.jaren[0].jaar;
+		$scope.actiefJaar = Globals.actiefJaar;
+	});
+	$scope.kiesJaar = function(jaar){
+		console.log("kiesJaar:" + jaar.jaar);
+		Globals.actiefJaar = jaar.jaar;
+		$scope.actiefJaar = Globals.actiefJaar;
+	}
+}
+JaarKeuzeCtrl.$inject = ['$scope','Globals','Jaar']
 
 /******************************* RapportenCtrl ********************************/
 
@@ -170,36 +188,19 @@ TransactiesCtrl.$inject = ['$scope', 'TransactieSoort']
 function TransactiesCtrl($scope, Transactie, $dialog,Globals) {
 	console.log('TransactiesCtrl');
 	$scope.offset = 0;
-	$scope.limit = 100;
-	$scope.f_datum = "";
-	$scope.f_omschrijving = "";
-	$scope.f_bonnummer = "";
-	$scope.f_rekeningnummer = "";
-	$scope.f_afbij = "";
-	$scope.f_valuta = "";
-	$scope.f_bedragexclbtw = "";
-	$scope.f_bedraginclbtw = "";
-	$scope.f_btwpercentage = "";
-	$scope.f_transactiesoort = "";
-	$scope.f_kilometers = "";
+	$scope.limit = 1000;
+	$scope.filter = "";
+	$scope.sortCol = "datum";
+	$scope.sortReverse = false;
 	$scope.refresh = function(){
 		$scope.transacties = Transactie.query(
 			{ 	offset:$scope.offset,
 			  	limit:$scope.limit,
 			  	boekId:Globals.actiefBoek,
-			  	datum: $scope.f_datum,
-			  	omschrijving: $scope.f_omschrijving,
-				bonnummer: $scope.f_bonnummer,
-				rekeningnummer: $scope.f_rekeningnummer,
-				afbij: $scope.f_afbij,
-				valuta: $scope.f_valuta,
-				bedragexclbtw: $scope.f_bedragexclbtw,
-				bedraginclbtw: $scope.f_bedraginclbtw,
-				btwpercentage: $scope.f_btwpercentage,
-				transactiesoort: $scope.f_transactiesoort,
-				kilometers: $scope.f_kilometers
+				jaar:Globals.actiefJaar
 			},
 			function(){
+				console.log($scope.transacties[0]);
 				$scope.transactiesCount = $scope.transacties.length;
 			}
 		);
@@ -216,6 +217,23 @@ function TransactiesCtrl($scope, Transactie, $dialog,Globals) {
 		      }
 		    });
 	};
+	$scope.sort = function(col){
+		console.log("sort: " + col + ", " + $(col).attr("class"));
+		$scope.sortCol = col;
+		$scope.sortReverse = !$scope.sortReverse;
+	}
+	$scope.sortIcon = function(col){
+		console.log("sortIcon: " + col);
+		if(col == $scope.sortCol){
+			if ( $scope.sortReverse ){
+				return "icon-sort-down";
+			} else {
+				return "icon-sort-up";
+			}
+		} else {
+			return "icon-sort";
+		}
+	}
 };
 TransactiesCtrl.$inject = ['$scope', 'Transactie','$dialog','Globals']
 

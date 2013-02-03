@@ -105,9 +105,8 @@ create or replace view saldo as
     order by t.afbij, t.transactiesoort, t.datum
 ;
 
-/*
-t.boek = '" + _boek + "'\n"
-    and    t.datum >= to_date('" + _beginDatum + "','YYYY-MM-DD')\n"
-    and    t.datum <= to_date('" + _eindDatum + "','YYYY-MM-DD')\n"
-    and    v2.id = '" + _valuta + "'\n"
-*/
+create or replace view jaren as
+  select distinct extract(year from datum) jaar
+  from transacties
+  order by jaar
+;

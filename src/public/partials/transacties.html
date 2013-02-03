@@ -4,6 +4,8 @@
         <button class="btn" ng-click="refresh()">Refresh</button>
         <button class="btn" ng-click="toevoegPopup()">Toevoegen</button>
     </div>
+    <label for="filter">Filter</label>
+    <input type="text" class="input-mini" id="filter" name="filter" ng-model="filter"/>
     <table class="table">
         <thead>
         <tr>
@@ -11,42 +13,29 @@
             <th>Id</th>
             <th>Boek</th>
             -->
-            <th>Datum</th>
-            <th>Omschrijving</th>
-            <th>Bonnummer</th>
-            <th>Rekeningnumer</th>
-            <th>Af/Bij</th>
-            <th>Valuta</th>
-            <th>Bedrag excl. btw</th>
-            <th>Bedrag incl. btw.</th>
-            <th>Btw%</th>
-            <th>Soort</th>
-            <th>Km</th>
-        </tr>
-        <tr>
-            <td><input class="input-mini" name="f_datum" ng-model="f_datum"/></td>
-            <td><input type="text" class="input-mini" name="f_omschrijving" ng-model="f_omschrijving"/></td>
-            <td><input type="text" class="input-mini" name="f_bonnumer" ng-model="f_bonnummer"/></td>
-            <td><input type="text" class="input-mini" name="f_rekeningnummer" ng-model="f_rekeningnummer"/></td>
-            <td><input type="text" class="input-mini" name="f_afbij" ng-model="f_afbij"/></td>
-            <td><input type="text" class="input-mini" name="f_valuta" ng-model="f_valuta"/></td>
-            <td><input type="text" class="input-mini" name="f_bedragexclbtw" ng-model="f_bedragexclbtw"/></td>
-            <td><input type="text" class="input-mini" name="f_bedraginclbtw" ng-model="f_bedraginclbtw"/></td>
-            <td><input type="text" class="input-mini" name="f_btwpercentage" ng-model="f_btwpercentage"/></td>
-            <td><input type="text" class="input-mini" name="f_transactiesoort" ng-model="f_transactiesoort"/></td>
-            <td><input type="text" class="input-mini" name="f_kilometers" ng-model="f_kilometers"/></td>
+            <th>Datum <i class="{{sortIcon('datum')}}" ng-click="sort('datum')"></i></th>
+            <th>Omschr <i class="{{sortIcon('omschrijving')}}"  ng-click="sort('omschrijving')"></i></th>
+            <th>Bonnr <i class="{{sortIcon('bonnummer')}}"  ng-click="sort('bonnummer')"></i></th>
+            <th>Reknr <i class="{{sortIcon('rekeningnummer')}}"  ng-click="sort('rekeningnummer')"></i></th>
+            <th>Af/Bij <i class="{{sortIcon('afbij')}}"  ng-click="sort('afbij')"></i></th>
+            <th>Valuta <i class="{{sortIcon('valuta')}}"  ng-click="sort('valuta')"></i></th>
+            <th>Bedr excl <i class="{{sortIcon('bedragexclusiefbtw')}}"  ng-click="sort('bedragexclusiefbtw')"></i></th>
+            <th>Bedr incl <i class="{{sortIcon('bedraginclusiefbtw')}}"  ng-click="sort('bedraginclusiefbtw')"></i></th>
+            <th>Btw% <i class="{{sortIcon('btwpercentage')}}"  ng-click="sort('btwpercentage')"></i></th>
+            <th>Soort <i class="{{sortIcon('transactiesoort')}}"  ng-click="sort('transactiesoort')"></i></th>
+            <th>Km <i class="{{sortIcon('kilometers')}}"  ng-click="sort('kilometers')"></i></th>
         </tr>
         </thead>
         <tfoot>
         <tr>
             <td colspan="13">
-                Records: {{transactiesCount}}
+                <label>Records: {{transactiesCount}}</label>
                 <label for="offset">Offset</label><input value="0" name="offset"
-                                                         id="offset"
+                                                         id="offset" type="text"
                                                          ng-model="offset"
                                                          class="input-mini"/>
                 <label for="limit">Limit</label><input value="10" name="limit"
-                                                       id="limit"
+                                                       id="limit"  type="text"
                                                        ng-model="limit"
                                                        class="input-mini"/>
                 <input type="submit" value="Refresh" ng-click="refresh()"/>
@@ -54,12 +43,12 @@
         </tr>
         </tfoot>
         <tbody>
-        <tr data-ng-repeat="transactie in transacties">
+        <tr data-ng-repeat="transactie in transacties | filter:filter | orderBy:sortCol:sortReverse ">
             <!--
             <td>{{transactie.id}}</td>
             <td>{{transactie.boek}}</td>
             -->
-            <td style="white-space: nowrap;">{{transactie.datum | date}}</td>
+            <td style="white-space: nowrap;">{{transactie.datum | date:'MM/dd/yyyy'}}</td>
             <td>{{transactie.omschrijving}}</td>
             <td>{{transactie.bonnummer| number}}</td>
             <td>{{transactie.rekeningnummer| number}}</td>
