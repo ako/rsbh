@@ -3,17 +3,6 @@ tfoot label, tfoot input { display:inline; }
 body { margin-top: 40px; }
 th { white-space: nowrap; }
 
-@font-face {
-    font-family: 'Ako';
-    src: url("../font/Ako.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-}
-
-.ako-icons {
-    font-family: 'Ako';
-}
-
 #busy { display: none; position: fixed; left: 0; top: 0;
     width: 100%; height: 100%; background-color: rgba(192,192,192,.5);
     z-index: 1040; text-align: center;
@@ -22,3 +11,7 @@ th { white-space: nowrap; }
 #busy i { margin-top: 20%; }
 
 .transactieForm { display: none; background-color: #ddd; margin-top: 1em; margin-bottom: 1em; padding: 10px; }
+.transactieForm .alert { display: none; }
+
+table tr.soort { border-top: 2px solid #708090; }
+table td.totalen { border-top: 2px solid #708090; }

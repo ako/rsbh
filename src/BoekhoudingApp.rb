@@ -48,18 +48,18 @@ end
 class Transactie
     include DataMapper::Resource
     storage_names[:default] = 'transacties'
-    property :id,                   Integer, :key => true
-    property :boek,                 String, :required => true
-    property :datum,                Date
-    property :omschrijving,         String
+    property :id,                   Integer,    :key => true
+    property :boek,                 String,     :required => true
+    property :datum,                Date,       :required => true
+    property :omschrijving,         String,     :length => 1..2000
     property :bonnummer,            Integer
     property :rekeningnummer,       Integer
-    property :afbij,                String
-    property :valuta,               String
+    property :afbij,                String,     :required => true, :length => 1..3
+    property :valuta,               String,     :required => true, :length => 1..3
     property :bedragexclusiefbtw,   Float
     property :bedraginclusiefbtw,   Float
     property :btwpercentage,        Float
-    property :transactiesoort,      String
+    property :transactiesoort,      String,     :required => true
     property :kilometers,           Integer
 
     def self.nextId
@@ -123,6 +123,20 @@ class Saldo
     property :kilometers,           Integer
 end
 
+class TotalenPerSoortPerJaar
+    include DataMapper::Resource
+    storage_names[:default] = 'totalen_per_soort_per_jaar'
+    property :jaar,                 Integer, :key => true
+    property :boek,                 String, :key => true
+    property :transactiesoort,      String, :key => true
+    property :afinclbtw,            Float
+    property :afexclbtw,            Float
+    property :bijinclbtw,           Float
+    property :bijexclbtw,           Float
+    property :inclusiefbtw,         Float
+    property :exclusiefbtw,         Float
+end
+
 configure do
 	set :static,  true
 end
@@ -166,17 +180,34 @@ post '/boeken/:boekId/transacties' do | boekId |
     tx.kilometers  = data['kilometers']
 
     logger.info tx
-    if tx.save
-        #valid, saved
-        logger.info "save, id #{tx.id}"
-        status 201 #Created
-        newTxUrl = "/boeken/#{boekId}/transacties/#{tx.id}"
-        headers 'Location' => newTxUrl
-    else
-        #not valid
-        tx.errors.each do | e |
-            logger.info e
+    begin
+        if tx.save
+            #valid, saved
+            # Created
+            status 201
+            logger.info "save, id #{tx.id}"
+            newTxUrl = "/boeken/#{boekId}/transacties/#{tx.id}"
+            headers 'Location' => newTxUrl
+            tx.to_json
+        else
+            #not valid
+            tx.errors.each do | e |
+                logger.info e
+            end
+            # Bad Request
+            status 400
+            errors = Array.new
+            tx.errors.each do | e |
+                errors.push (e[0])
+            end
+            errors.to_json
         end
+    rescue StandardError => e
+        logger.info("rescueing save...")
+        logger.info(e)
+        logger.info("#{$!}")
+        status 500
+        e.resource.errors.to_json
     end
 end
 
@@ -187,6 +218,13 @@ get '/boeken/:boekId/transacties/:transactieId' do | boekId, transactieId |
     transacties = Transactie.count(:boek => boekId)
     logger.info "transacties aantal: #{transacties}"
     transacties.to_json
+end
+
+get '/boeken/:boekId/jaar/:jaar/totalen' do | boekId, jaar |
+	content_type 'text/json'
+    logger.info "totalen per jaar per soort"
+    totalen = TotalenPerSoortPerJaar.all(:boek=>boekId, :jaar=>jaar )
+    totalen.to_json
 end
 
 get '/boeken/:boekId/transacties/:transactieId' do | boekId, transactieId |
@@ -284,5 +322,6 @@ get '/boeken/:boekId/saldo/' do | boekId |
 	saldo.to_json
 end
 
+#DataMapper::Model.raise_on_save_failure = true
 DataMapper.finalize
 

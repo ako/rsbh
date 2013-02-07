@@ -14,6 +14,8 @@ boekhoudingApp.
 		{templateUrl:'partials/welkom.html', controller:WelkomCtrl}).
 		when('/rapporten',
 		{templateUrl:'partials/rapporten.html', controller:RapportenCtrl}).
+		when('/totalenrapport',
+		{templateUrl:'partials/totalenrapport.html', controller:TotalenRapportCtrl}).
 		when('/transacties',
 		{templateUrl:'partials/transacties.html', controller:TransactiesCtrl}).
 		when('/boeken',
@@ -40,6 +42,13 @@ BoekhoudingSvc.
 		return $resource('/boeken/:boekId/:rapportType/?van=:beginDatum&tot=:eindDatum&valuta=:valuta',
 			{}, {
 				query:{method:'GET', params:{rapportType:''}, isArray:true}
+			});
+	}).
+	factory('TotalenPerSoortPerJaar',function ($resource) {
+		console.log('totalenPerSoortPerJaarSvc');
+		return $resource('/boeken/:boekId/jaar/:jaar/totalen/',
+			{}, {
+				query:{method:'GET', params:{boekId:''}, isArray:true}
 			});
 	}).
 	factory('Boek',function ($resource) {
@@ -113,7 +122,7 @@ BoekKeuzeCtrl.$inject = ['$scope','Globals','Boek']
 function JaarKeuzeCtrl($scope,Globals,Jaar){
 	$scope.jaren = Jaar.query(function(){
 		console.log("jaren: "+ $scope.jaren.length);
-		Globals.actiefJaark = $scope.jaren[0].jaar;
+		Globals.actiefJaar = $scope.jaren[0].jaar;
 		$scope.actiefJaar = Globals.actiefJaar;
 	});
 	$scope.kiesJaar = function(jaar){
@@ -149,8 +158,20 @@ function RapportenCtrl($scope, Rapport,Globals) {
 	};
 	$scope.toonRapport();
 };
-
 RapportenCtrl.$inject = ['$scope','Rapport','Globals']
+
+function TotalenRapportCtrl($scope,TotalenPerSoortPerJaar,Globals) {
+	console.log("TotalenRapportCtrl");
+	$scope.refresh = function(){
+		console.log("refresh");
+		$scope.totalen = TotalenPerSoortPerJaar.query({
+			boekId: Globals.actiefBoek,
+			jaar: Globals.actiefJaar
+		});
+	};
+	$scope.refresh();
+}
+RapportenCtrl.$inject = ['$scope','TotalenPerSoortPerJaar','Globals']
 
 /************************************* BoekenCtrl *****************************/
 
@@ -233,7 +254,17 @@ function TransactiesCtrl($scope, Transactie, $dialog,Globals, TransactieSoort, V
 	$scope.transactieOpslaan = function(tx){
 		console.log("transactieOpslaan");
 		console.log($scope.tx);
-		$scope.tx.$save({boekId:Globals.actiefBoek});
+		$scope.tx.$save({boekId:Globals.actiefBoek},function(ntx){
+			console.log("transactieOpslaan: " + ntx);
+			$(".transactieForm .alert").addClass("alert-success").show();
+			$(".transactieForm .alert span").text("Ok dan, nieuwe transactie toegevoegd.");
+			$scope.transacties.unshift(ntx);
+			$scope.tx = new Transactie();
+		}, function(errs){
+			/* oops */
+			$(".transactieForm .alert").addClass("alert-error").show();
+			$(".transactieForm .alert span").text("Foutje, niet zo best, transactie is niet opgeslagen<br/>"+ errs);
+		});
 	}
 };
 TransactiesCtrl.$inject = ['$scope', 'Transactie','$dialog','Globals','TransactieSoort','Valuta']

@@ -110,3 +110,24 @@ create or replace view jaren as
   from transacties
   order by jaar
 ;
+
+create or replace view totalen_per_soort_per_jaar as
+    select  extract(year from datum)    as jaar
+    ,       boek                        as boek
+    ,       transactiesoort             as transactiesoort
+    ,       sum(case when afbij = 'AF' then bedraginclusiefbtw else 0 end) as afinclbtw
+    ,       sum(case when afbij = 'AF' then bedragexclusiefbtw else 0 end) as afexclbtw
+    ,       sum(case when afbij = 'BIJ' then bedraginclusiefbtw else 0 end) as bijinclbtw
+    ,       sum(case when afbij = 'BIJ' then bedragexclusiefbtw else 0 end) as bijexclbtw
+    ,       sum(case when afbij = 'AF' then -1 * bedraginclusiefbtw else bedraginclusiefbtw end)     as inclusiefbtw
+    ,       sum(case when afbij = 'AF' then -1 * bedragexclusiefbtw else bedragexclusiefbtw end)     as exclusiefbtw
+    ,       min(datum)                  as eerste_datum
+    ,       max(datum)                  as laatste_datum
+    from    transacties
+    group by jaar
+    ,       boek
+    ,       transactiesoort
+    order by jaar
+    ,       boek
+    ,       transactiesoort
+;

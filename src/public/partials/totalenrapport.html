@@ -1,0 +1,32 @@
+<h2>Totalen</h2>
+<button class="btn" ng-click="refresh()">Refresh</button>
+<table class="table" id="rapport">
+    <thead>
+    <tr>
+        <th>Soort</th>
+        <th></th>
+        <th>Excl btw</th>
+        <th>Incl btw</th>
+    </tr>
+    </thead>
+    <tbody data-ng-repeat="soort in totalen">
+    <tr class="soort">
+        <td>{{soort.transactiesoort}}</td>
+        <td>Bij</td>
+        <td>{{soort.bijexclbtw}}</td>
+        <td>{{soort.bijinclbtw}}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Af</td>
+        <td>{{soort.afexclbtw}}</td>
+        <td>{{soort.afinclbtw}}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Totaal</td>
+        <td class="totalen">{{soort.exclusiefbtw}}</td>
+        <td class="totalen">{{soort.inclusiefbtw}}</td>
+    </tr>
+    </tbody>
+</table>
