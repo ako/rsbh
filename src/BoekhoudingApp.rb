@@ -129,6 +129,7 @@ class TotalenPerSoortPerJaar
     property :jaar,                 Integer, :key => true
     property :boek,                 String, :key => true
     property :transactiesoort,      String, :key => true
+    property :valuta,               String, :key => true
     property :afinclbtw,            Float
     property :afexclbtw,            Float
     property :bijinclbtw,           Float
@@ -222,9 +223,17 @@ end
 
 get '/boeken/:boekId/jaar/:jaar/totalen' do | boekId, jaar |
 	content_type 'text/json'
-    logger.info "totalen per jaar per soort"
-    totalen = TotalenPerSoortPerJaar.all(:boek=>boekId, :jaar=>jaar )
-    totalen.to_json
+	begin
+        logger.info "totalen per jaar per soort"
+        val = "EUR"
+        totalen = TotalenPerSoortPerJaar.all(:boek=>boekId, :jaar=>jaar, :valuta=>val )
+        totalen.to_json
+    rescue StandardError => e
+        logger.info("rescueing TotalenPerSoortPerJaar")
+        logger.info(e)
+        status 500
+        e.resource.errors.to_json
+    end
 end
 
 get '/boeken/:boekId/transacties/:transactieId' do | boekId, transactieId |

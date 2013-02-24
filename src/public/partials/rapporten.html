@@ -32,28 +32,28 @@
         <th>Reknr.</th>
         <th>Af/Bij</th>
         <th>Valuta</th>
-        <th>Bedrag ex.</th>
-        <th>Bedrag in.</th>
-        <th>Btw%</th>
+        <th class="money">Bedrag ex.</th>
+        <th class="money">Bedrag in.</th>
+        <th class="money">Btw%</th>
         <th>Soort</th>
-        <th>Km</th>
+        <th class="money">Km</th>
     </tr>
     </thead>
     <tbody>
     <tr data-ng-repeat="regel in rapportRegels">
         <td>{{regel.id | number }}</td>
         <td>{{regel.boek}}</td>
-        <td>{{regel.datum  | date}}</td>
-        <td>{{regel.omschrijving}}</td>
+        <td class="datum">{{regel.datum  | date}}</td>
+        <td class="omschrijving">{{regel.omschrijving}}</td>
         <td>{{regel.bonnummer | number }}</td>
         <td>{{regel.rekeningnummer | number }}</td>
         <td>{{regel.afbij}}</td>
         <td>{{regel.valuta}}</td>
-        <td>{{regel.bedragexclusiefbtw | number }}</td>
-        <td>{{regel.bedraginclusiefbtw | number }}</td>
-        <td>{{regel.btwpercentage | number }}</td>
+        <td class="money">{{regel.bedragexclusiefbtw | number:2 }}</td>
+        <td class="money">{{regel.bedraginclusiefbtw | number:2 }}</td>
+        <td class="money">{{regel.btwpercentage | number:2 }}</td>
         <td>{{regel.transactiesoort}}</td>
-        <td>{{regel.kilometers | number }}</td>
+        <td class="money">{{regel.kilometers | number }}</td>
     </tr>
     </tbody>
 </table>

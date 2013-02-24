@@ -12,10 +12,13 @@ boekhoudingApp.
 	$routeProvider.
 		when('/welkom',
 		{templateUrl:'partials/welkom.html', controller:WelkomCtrl}).
-		when('/rapporten',
-		{templateUrl:'partials/rapporten.html', controller:RapportenCtrl}).
-		when('/totalenrapport',
+		when('/rapport/totalen',
 		{templateUrl:'partials/totalenrapport.html', controller:TotalenRapportCtrl}).
+
+		when('/rapport/:rapportType',
+		{templateUrl:'partials/rapporten.html', controller:RapportenCtrl}).
+
+
 		when('/transacties',
 		{templateUrl:'partials/transacties.html', controller:TransactiesCtrl}).
 		when('/boeken',
@@ -90,8 +93,9 @@ BoekhoudingSvc.
 	}).factory('Globals',function($resource){
 		console.log('Globals');
 		return {
-			actiefBoek: "x",
-			actiefJaar: 2013
+			actiefBoek: "test",
+			actiefJaar: 2013,
+			actiefValuta: "EUR"
 		};
 	});
 
@@ -133,14 +137,28 @@ function JaarKeuzeCtrl($scope,Globals,Jaar){
 }
 JaarKeuzeCtrl.$inject = ['$scope','Globals','Jaar']
 
+function ValutaKeuzeCtrl($scope,Globals,Valuta){
+	$scope.valutas = Valuta.query(function(){
+		console.log("valutas: "+ $scope.valutas.length);
+		Globals.actiefValuta = $scope.valutas[0].id;
+		$scope.actiefValuta = Globals.actiefValuta;
+	});
+	$scope.kiesValuta = function(valuta){
+		console.log("kiesValuta:" + valuta.id);
+		Globals.actiefValuta = valuta.id;
+		$scope.actiefValuta = Globals.actiefValuta;
+	}
+}
+ValutaKeuzeCtrl.$inject = ['$scope','Globals','Valuta']
+
 /******************************* RapportenCtrl ********************************/
 
-function RapportenCtrl($scope, Rapport,Globals) {
+function RapportenCtrl($scope, Rapport,Globals,$routeParams) {
 	console.log('RapportenCtrl');
 	$scope.qryBegindatum = "01/01/2000";
 	$scope.qryEinddatum = "01/01/2014";
 	$scope.qryValuta = "EUR";
-	$scope.qryRapporttype = "inkomsten";
+	$scope.qryRapporttype = $routeParams.rapportType;
 	$scope.toonRapport = function () {
 		console.log("toonRapport: " + $scope.qryValuta + ", " +
 			$scope.qryBegindatum + ", " + $scope.qryEinddatum + ", " +
@@ -158,7 +176,7 @@ function RapportenCtrl($scope, Rapport,Globals) {
 	};
 	$scope.toonRapport();
 };
-RapportenCtrl.$inject = ['$scope','Rapport','Globals']
+RapportenCtrl.$inject = ['$scope','Rapport','Globals','$routeParams']
 
 function TotalenRapportCtrl($scope,TotalenPerSoortPerJaar,Globals) {
 	console.log("TotalenRapportCtrl");
@@ -166,12 +184,13 @@ function TotalenRapportCtrl($scope,TotalenPerSoortPerJaar,Globals) {
 		console.log("refresh");
 		$scope.totalen = TotalenPerSoortPerJaar.query({
 			boekId: Globals.actiefBoek,
-			jaar: Globals.actiefJaar
+			jaar: Globals.actiefJaar,
+			valuta: Globals.actiefValuta
 		});
 	};
 	$scope.refresh();
 }
-RapportenCtrl.$inject = ['$scope','TotalenPerSoortPerJaar','Globals']
+TotalenRapportCtrl.$inject = ['$scope','TotalenPerSoortPerJaar','Globals']
 
 /************************************* BoekenCtrl *****************************/
 

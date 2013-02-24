@@ -7,8 +7,8 @@ create or replace view inkomsten as
     ,      t.rekeningnummer
     ,      t.afbij
     ,      v2.id as valuta
-    ,      ((v.value * t.bedragexclusiefbtw)/v2.value) bedragexclusiefbtw
-    ,      ((v.value * t.bedraginclusiefbtw)/v2.value) bedraginclusiefbtw
+    ,      round(((v.value * t.bedragexclusiefbtw)/v2.value),2) bedragexclusiefbtw
+    ,      round(((v.value * t.bedraginclusiefbtw)/v2.value),2) bedraginclusiefbtw
     ,      t.btwpercentage
     ,      t.transactiesoort
     ,      t.kilometers
@@ -28,17 +28,17 @@ create or replace view uitgaven as
     ,      t.bonnummer
     ,      t.rekeningnummer
     ,      t.afbij
-    ,      v.id as valuta
-    ,      case
-            when t.kilometers is null
-            then ((v.value * t.bedragexclusiefbtw)/v2.value)
-            else ((vp.value *(t.kilometers * p.prijsinclusiefbtw * (100 / (100 + p.btwpercentage))))/v2.value)
-            end as bedragexclusiefbtw
-    ,      case
+    ,      v2.id as valuta
+    ,      round(case
+                when t.kilometers is null
+                then ((v.value * t.bedragexclusiefbtw)/v2.value)
+                else ((vp.value *(t.kilometers * p.prijsinclusiefbtw * (100 / (100 + p.btwpercentage))))/v2.value)
+                end,2) as bedragexclusiefbtw
+    ,      round(case
                   when t.kilometers is null
                   then ((v.value * t.bedraginclusiefbtw)/v2.value)
                   else ((vp.value *(t.kilometers * p.prijsinclusiefbtw))/v2.value)
-                  end as bedraginclusiefbtw
+                  end,2) as bedraginclusiefbtw
     ,      case
                  when t.kilometers is null
                   then t.btwpercentage
@@ -74,17 +74,17 @@ create or replace view saldo as
     ,      t.bonnummer
     ,      t.rekeningnummer
     ,      t.afbij
-    ,      t.valuta
-    ,      case
+    ,      v2.id as valuta
+    ,      round(case
              when t.kilometers is null
              then ((v.value * t.bedragexclusiefbtw)/v2.value)
              else ((vp.value *(t.kilometers * p.prijsinclusiefbtw * (100 / (100 + p.btwpercentage))))/v2.value)
-             end as bedragexclusiefbtw
-    ,      case
+             end,2) as bedragexclusiefbtw
+    ,      round(case
              when t.kilometers is null
              then ((v.value * t.bedraginclusiefbtw)/v2.value)
              else ((vp.value *(t.kilometers * p.prijsinclusiefbtw))/v2.value)
-             end as bedraginclusiefbtw
+             end,2) as bedraginclusiefbtw
     ,      case
              when t.kilometers is null
              then t.btwpercentage
@@ -115,19 +115,22 @@ create or replace view totalen_per_soort_per_jaar as
     select  extract(year from datum)    as jaar
     ,       boek                        as boek
     ,       transactiesoort             as transactiesoort
-    ,       sum(case when afbij = 'AF' then bedraginclusiefbtw else 0 end) as afinclbtw
-    ,       sum(case when afbij = 'AF' then bedragexclusiefbtw else 0 end) as afexclbtw
-    ,       sum(case when afbij = 'BIJ' then bedraginclusiefbtw else 0 end) as bijinclbtw
-    ,       sum(case when afbij = 'BIJ' then bedragexclusiefbtw else 0 end) as bijexclbtw
-    ,       sum(case when afbij = 'AF' then -1 * bedraginclusiefbtw else bedraginclusiefbtw end)     as inclusiefbtw
-    ,       sum(case when afbij = 'AF' then -1 * bedragexclusiefbtw else bedragexclusiefbtw end)     as exclusiefbtw
+    ,       valuta                      as valuta
+    ,       round(sum(case when afbij = 'AF' then bedraginclusiefbtw else 0 end),2) as afinclbtw
+    ,       round(sum(case when afbij = 'AF' then bedragexclusiefbtw else 0 end),2) as afexclbtw
+    ,       round(sum(case when afbij = 'BIJ' then bedraginclusiefbtw else 0 end),2) as bijinclbtw
+    ,       round(sum(case when afbij = 'BIJ' then bedragexclusiefbtw else 0 end),2) as bijexclbtw
+    ,       round(sum(case when afbij = 'AF' then -1 * bedraginclusiefbtw else bedraginclusiefbtw end),2)     as inclusiefbtw
+    ,       round(sum(case when afbij = 'AF' then -1 * bedragexclusiefbtw else bedragexclusiefbtw end),2)     as exclusiefbtw
     ,       min(datum)                  as eerste_datum
     ,       max(datum)                  as laatste_datum
-    from    transacties
+    from    saldo
     group by jaar
     ,       boek
     ,       transactiesoort
+    ,       valuta
     order by jaar
     ,       boek
     ,       transactiesoort
+    ,       valuta
 ;

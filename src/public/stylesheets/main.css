@@ -15,3 +15,6 @@ th { white-space: nowrap; }
 
 table tr.soort { border-top: 2px solid #708090; }
 table td.totalen { border-top: 2px solid #708090; }
+table .money { text-align: right; }
+table .datum { white-space: nowrap; }
+table .omschrijving { width: 100%; }

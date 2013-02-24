@@ -1,32 +1,36 @@
 <h2>Totalen</h2>
 <button class="btn" ng-click="refresh()">Refresh</button>
 <table class="table" id="rapport">
+    <col/>
+    <col/>
+    <col class="money"/>
+    <col class="money"/>
     <thead>
     <tr>
         <th>Soort</th>
         <th></th>
-        <th>Excl btw</th>
-        <th>Incl btw</th>
+        <th class="money">Excl btw</th>
+        <th class="money">Incl btw</th>
     </tr>
     </thead>
     <tbody data-ng-repeat="soort in totalen">
     <tr class="soort">
         <td>{{soort.transactiesoort}}</td>
         <td>Bij</td>
-        <td>{{soort.bijexclbtw}}</td>
-        <td>{{soort.bijinclbtw}}</td>
+        <td class="money">{{soort.bijexclbtw | number:2 }}</td>
+        <td class="money">{{soort.bijinclbtw | number:2 }}</td>
     </tr>
     <tr>
         <td></td>
         <td>Af</td>
-        <td>{{soort.afexclbtw}}</td>
-        <td>{{soort.afinclbtw}}</td>
+        <td class="money">{{soort.afexclbtw | number:2 }}</td>
+        <td class="money">{{soort.afinclbtw | number:2 }}</td>
     </tr>
     <tr>
         <td></td>
         <td>Totaal</td>
-        <td class="totalen">{{soort.exclusiefbtw}}</td>
-        <td class="totalen">{{soort.inclusiefbtw}}</td>
+        <td class="totalen money">{{soort.exclusiefbtw | number:2 }}</td>
+        <td class="totalen money">{{soort.inclusiefbtw | number:2 }}</td>
     </tr>
     </tbody>
 </table>

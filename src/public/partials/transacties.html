@@ -82,7 +82,8 @@
                         <select id="valuta" type="text"
                                class="input-large"
                                name="valuta" ng-model="tx.valuta"
-                                ng-options="obj.id as obj.omschrijving for obj in valutas"/>
+                               ng-options="obj.id as obj.omschrijving for obj in valutas"
+                               ng-disabled="tx.kilometers"/>
                     </div>
                 </div>
                 <div class="control-group">
@@ -91,7 +92,8 @@
                     <div class="controls">
                         <input id="kilometers" type="number"
                                class="input-large"
-                               name="kilometers" ng-model="tx.kilometers"/>
+                               name="kilometers" ng-model="tx.kilometers"
+                               ng-disabled="tx.bedragexclbtw || tx.bedraginclbtw || tx.valuta || tx.btwpercentage" />
                     </div>
                 </div>
                 <div class="control-group">
@@ -102,7 +104,8 @@
                         <input id="bedragexclbtw" type="number"
                                class="input-large" step="any"
                                name="bedragexclbtw"
-                               ng-model="tx.bedragexclbtw"/>
+                               ng-model="tx.bedragexclbtw"
+                               ng-disabled="tx.kilometers || tx.bedraginclbtw"/>
                     </div>
                 </div>
                 <div class="control-group">
@@ -113,7 +116,8 @@
                         <input id="bedraginclbtw" type="number"
                                class="input-large" step="any"
                                name="bedraginclbtw"
-                               ng-model="tx.bedraginclbtw"/>
+                               ng-model="tx.bedraginclbtw"
+                               ng-disabled="tx.kilometers || tx.bedragexclbtw "/>
                     </div>
                 </div>
                 <div class="control-group">
@@ -123,7 +127,8 @@
                         <input id="btwpercentage" type="number"
                                class="input-large" step="any"
                                name="btwpercentage"
-                               ng-model="tx.btwpercentage"/>
+                               ng-model="tx.btwpercentage"
+                               ng-disabled="tx.kilometers"/>
                     </div>
                 </div>
             </fieldset>

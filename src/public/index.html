@@ -37,8 +37,10 @@
                         Rapporten <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#/rapporten">Rapporten</a></li>
-                        <li><a href="#/totalenrapport">Totalen</a></li>
+                        <li><a href="#/rapport/inkomsten">Inkomsten</a></li>
+                        <li><a href="#/rapport/uitgaven">Uitgaven</a></li>
+                        <li><a href="#/rapport/saldo">Saldo</a></li>
+                        <li><a href="#/rapport/totalen">Totalen per soort</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -76,6 +78,18 @@
                         <li>
                             <a data-ng-repeat="jaar in jaren | orderBy:'jaar':reverse"
                                ng-click="kiesJaar(jaar)">{{jaar.jaar}}</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown " ng-controller="ValutaKeuzeCtrl">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {{actiefValuta}}
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a data-ng-repeat="valuta in valutas | orderBy:'valuta'"
+                               ng-click="kiesValuta(valuta)">{{valuta.id}}</a>
                         </li>
                     </ul>
                 </li>
