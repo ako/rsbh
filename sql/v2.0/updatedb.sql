@@ -134,3 +134,22 @@ create or replace view totalen_per_soort_per_jaar as
     ,       transactiesoort
     ,       valuta
 ;
+
+create or replace view totalen_per_jaar as
+    select  jaar        as jaar
+    ,       boek        as boek
+    ,       valuta      as valuta
+    ,       round(sum(afinclbtw),2) as afinclbtw
+    ,       round(sum(afexclbtw),2) as afexclbtw
+    ,       round(sum(bijinclbtw),2) as bijinclbtw
+    ,       round(sum(bijexclbtw),2) as bijexclbtw
+    ,       round(sum(inclusiefbtw),2) as inclusiefbtw
+    ,       round(sum(exclusiefbtw),2) as exclusiefbtw
+    from    totalen_per_soort_per_jaar
+    group by jaar
+    ,       boek
+    ,       valuta
+    order by jaar
+    ,       boek
+    ,       valuta
+    ;

@@ -186,6 +186,13 @@ function TotalenRapportCtrl($scope,TotalenPerSoortPerJaar,Globals) {
 			boekId: Globals.actiefBoek,
 			jaar: Globals.actiefJaar,
 			valuta: Globals.actiefValuta
+		},function(){
+			$scope.bijExBtw = _.reduce($scope.totalen,function(memo,num){return memo + num.bijexclbtw},0);
+			$scope.bijInBtw = _.reduce($scope.totalen,function(memo,num){return memo + num.bijinclbtw},0);
+			$scope.afExBtw = _.reduce($scope.totalen,function(memo,num){return memo + num.afexclbtw},0);
+			$scope.afInBtw = _.reduce($scope.totalen,function(memo,num){return memo + num.afinclbtw},0);
+			$scope.inclusiefBtw = _.reduce($scope.totalen,function(memo,num){return memo + num.inclusiefbtw},0);
+			$scope.exclusiefBtw = _.reduce($scope.totalen,function(memo,num){return memo + num.exclusiefbtw},0);
 		});
 	};
 	$scope.refresh();

@@ -33,4 +33,24 @@
         <td class="totalen money">{{soort.inclusiefbtw | number:2 }}</td>
     </tr>
     </tbody>
+    <tbody class="totalen">
+        <tr class="soort">
+            <td>Jaartotalen</td>
+            <td>Bij</td>
+            <td class="totalen money">{{bijExBtw | number:2}}</td>
+            <td class="totalen money">{{bijInBtw | number:2}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Af</td>
+            <td class="totalen money">{{afExBtw | number:2}}</td>
+            <td class="totalen money">{{afInBtw | number:2}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Totaal</td>
+            <td class="totalen money">{{exclusiefBtw | number:2}}</td>
+            <td class="totalen money">{{inclusiefBtw | number:2}}</td>
+        </tr>
+    </tbody>
 </table>
