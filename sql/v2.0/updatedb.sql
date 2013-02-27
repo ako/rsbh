@@ -9,7 +9,13 @@ create or replace view inkomsten as
     ,      v2.id as valuta
     ,      round(((v.value * t.bedragexclusiefbtw)/v2.value),2) bedragexclusiefbtw
     ,      round(((v.value * t.bedraginclusiefbtw)/v2.value),2) bedraginclusiefbtw
-    ,      t.btwpercentage
+    ,      round(
+            case
+                when t.btwpercentage is null
+                then ((t.bedraginclusiefbtw - t.bedragexclusiefbtw) / t.bedragexclusiefbtw) * 100
+                else t.btwpercentage
+                end
+            , 2) as btwpercentage
     ,      t.transactiesoort
     ,      t.kilometers
     from   transacties t
@@ -41,7 +47,14 @@ create or replace view uitgaven as
                   end,2) as bedraginclusiefbtw
     ,      case
                  when t.kilometers is null
-                  then t.btwpercentage
+                  then
+                        round(
+                          case
+                              when t.btwpercentage is null
+                              then ((t.bedraginclusiefbtw - t.bedragexclusiefbtw) / t.bedragexclusiefbtw) * 100
+                              else t.btwpercentage
+                              end
+                          , 2)
                   else p.btwpercentage
                  end as btwpercentage
     ,      t.transactiesoort
@@ -87,7 +100,14 @@ create or replace view saldo as
              end,2) as bedraginclusiefbtw
     ,      case
              when t.kilometers is null
-             then t.btwpercentage
+                  then
+                        round(
+                          case
+                              when t.btwpercentage is null
+                              then ((t.bedraginclusiefbtw - t.bedragexclusiefbtw) / t.bedragexclusiefbtw) * 100
+                              else t.btwpercentage
+                              end
+                          , 2)
              else p.btwpercentage
              end as btwpercentage
     ,      t.transactiesoort

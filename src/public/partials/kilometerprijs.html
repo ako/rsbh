@@ -11,10 +11,10 @@
     </thead>
     <tbody>
     <tr data-ng-repeat="prijs in kilometerPrijzen">
-        <td>{{prijs.begindatum | date}}</td>
-        <td>{{prijs.einddatum | date}}</td>
-        <td>{{prijs.prijsinclusiefbtw | number}}</td>
-        <td>{{prijs.btwpercentage | number}}</td>
+        <td>{{prijs.begindatum | date:'MM/dd/yyyy'}}</td>
+        <td>{{prijs.einddatum | date:'MM/dd/yyyy'}}</td>
+        <td class="money">{{prijs.prijsinclusiefbtw | number:2}}</td>
+        <td class="money">{{prijs.btwpercentage | number:2}}</td>
         <td>{{prijs.valuta}}</td>
     </tr>
     </tbody>
