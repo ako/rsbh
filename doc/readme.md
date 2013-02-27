@@ -26,6 +26,7 @@ Stappen voor installatie:
         $ gem install dm-postgres-adapter
         $ gem install kramdown
         $ gem install dm-ar-finders
+        $ gem install toml
 
 ## HTML documentatie genereren
 

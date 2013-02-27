@@ -155,9 +155,8 @@ ValutaKeuzeCtrl.$inject = ['$scope','Globals','Valuta']
 
 function RapportenCtrl($scope, Rapport,Globals,$routeParams) {
 	console.log('RapportenCtrl');
-	$scope.qryBegindatum = "01/01/2000";
-	$scope.qryEinddatum = "01/01/2014";
-	$scope.qryValuta = "EUR";
+	$scope.qryBegindatum = "01/01/" + Globals.actiefJaar;
+	$scope.qryEinddatum = "31/12/" + Globals.actiefJaar;
 	$scope.qryRapporttype = $routeParams.rapportType;
 	$scope.toonRapport = function () {
 		console.log("toonRapport: " + $scope.qryValuta + ", " +
@@ -169,7 +168,7 @@ function RapportenCtrl($scope, Rapport,Globals,$routeParams) {
 					rapportType:$scope.qryRapporttype,
 					beginDatum:$scope.qryBegindatum,
 					eindDatum:$scope.qryEinddatum,
-					valuta:$scope.qryValuta},
+					valuta:Globals.actiefValuta},
 				function () {
 					console.log("rapport query result: ");
 				});

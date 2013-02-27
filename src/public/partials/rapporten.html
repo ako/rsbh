@@ -5,18 +5,6 @@
         <input name="begindatum" class="input-medium" type="date" ng-model="qryBegindatum" width="8" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}"/>
         <label for="einddatum">Einddatum:</label>
         <input name="einddatum" class="input-medium" type="date" ng-model="qryEinddatum" width="8"/>
-        <label for="valuta">Valuta:</label>
-        <select name="valuta" class="input-small"  ng-model="qryValuta">
-            <option value="EUR">Euro</option>
-            <option value="NLG">Gulden</option>
-            <option value="DM">Duitse Mark</option>
-        </select>
-        <label for="rapporttype">Rapport type:</label>
-        <select name="rapporttype" class="input-small"  ng-model="qryRapporttype">
-            <option value="inkomsten">Inkomsten</option>
-            <option value="uitgaven">Uitgaven</option>
-            <option value="saldo">Saldo</option>
-        </select>
         <input type="submit" value="Toon rapport" ng-click="toonRapport()"/>
     </form>
 </div>
@@ -43,7 +31,7 @@
     <tr data-ng-repeat="regel in rapportRegels">
         <td>{{regel.id | number }}</td>
         <td>{{regel.boek}}</td>
-        <td class="datum">{{regel.datum  | date}}</td>
+        <td class="datum">{{regel.datum  | date:'MM/dd/yyyy'}}</td>
         <td class="omschrijving">{{regel.omschrijving}}</td>
         <td>{{regel.bonnummer | number }}</td>
         <td>{{regel.rekeningnummer | number }}</td>

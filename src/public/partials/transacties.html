@@ -206,19 +206,18 @@
             <td>{{transactie.id}}</td>
             <td>{{transactie.boek}}</td>
             -->
-            <td style="white-space: nowrap;">{{transactie.datum |
-                date:'MM/dd/yyyy'}}
+            <td style="white-space: nowrap;">{{transactie.datum | date:'MM/dd/yyyy'}}
             </td>
             <td>{{transactie.omschrijving}}</td>
             <td>{{transactie.bonnummer| number}}</td>
             <td>{{transactie.rekeningnummer| number}}</td>
             <td>{{transactie.afbij}}</td>
             <td>{{transactie.valuta}}</td>
-            <td>{{transactie.bedragexclusiefbtw | number }}</td>
-            <td>{{transactie.bedraginclusiefbtw | number }}</td>
-            <td>{{transactie.btwpercentage | number }}</td>
+            <td class="money">{{transactie.bedragexclusiefbtw | number:2 }}</td>
+            <td class="money">{{transactie.bedraginclusiefbtw | number:2 }}</td>
+            <td class="money">{{transactie.btwpercentage | number:2 }}</td>
             <td>{{transactie.transactiesoort}}</td>
-            <td>{{transactie.kilometers | number}}</td>
+            <td class="money">{{transactie.kilometers | number:2}}</td>
         </tr>
         </tbody>
 
