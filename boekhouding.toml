@@ -1,0 +1,2 @@
+[database]
+url = "postgres://bh2:bh2@localhost/bh2dev"

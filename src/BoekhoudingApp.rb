@@ -3,9 +3,12 @@ require 'data_mapper'
 require 'json'
 require 'dm-serializer'
 require 'dm-ar-finders'
+require 'toml'
 
 DataMapper::Logger.new(STDOUT, :debug)
-DataMapper.setup(:default, 'postgres://bh2:bh2@localhost/bh2dev')
+@bhenv = TOML.load_file("#{Dir.home}/.boekhouding.toml")
+print("Connecting to database #{@bhenv['database']['url']}\n")
+DataMapper.setup(:default, @bhenv['database']['url'])
 
 class Boek 
 	include DataMapper::Resource
